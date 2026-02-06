@@ -518,16 +518,98 @@ Two powerful context references for Copilot Chat:
 
 ```
 @workspace what files are in this project and what does each one do?
+
+```markdown
+| File/Folder | Purpose |
+|---|---|
+| `data/transactions_sample.csv` | Sample transaction data (~500 rows, ~5% fraud rate) for training and testing |
+| `notebooks/00_fraud_detection_pipeline.ipynb` | Original Jupyter notebook with fraud detection pipeline (weeks 5-7 work) |
+| `src/data_loader.py` | Module for loading and validating transaction data with error handling |
+| `src/features.py` | Module for feature engineering (time-based, amount-based, cyclical encodings) |
+| `src/model.py` | Module for XGBoost model training with MLflow experiment tracking |
+| `src/__init__.py` | Python package initialization file (currently empty) |
+| `tests/__init__.py` | Test package initialization (used in Week 9 for unit tests) |
+| `.github/copilot-instructions.md` | Project-wide Copilot coding standards (type hints, docstrings, error handling, ML conventions) |
+| `.github/instructions/features.instructions.md` | Path-specific Copilot instructions for feature engineering functions |
+| `.github/instructions/model.instructions.md` | Path-specific Copilot instructions for model training functions (MLflow required) |
+| `requirements.txt` | Python dependencies (pandas, xgboost, mlflow, sklearn, numpy) |
+| `README.md` | Project documentation |
+| `.gitignore` | Git ignore rules |
+```
 ```
 
 ```
+# Fraud Detection Documentation
+
+## Overview
+This documentation describes the fraud detection mechanisms and methodologies implemented in the Bread Financial Academy Fraud Detection starter repository for Week 08.
+
+## Key Components
+
+### Detection Methods
+- **Pattern Analysis**: Identifies unusual transaction patterns and anomalies
+- **Machine Learning Models**: Implements algorithms to classify transactions as fraudulent or legitimate
+- **Rule-Based Systems**: Applies predefined rules based on domain expertise
+- **Statistical Analysis**: Uses statistical measures to detect outliers
+
+### Data Processing
+- Data validation and cleansing
+- Feature engineering for model input
+- Normalization and scaling of features
+- Handling imbalanced datasets
+
+### Model Training & Evaluation
+- Training on historical fraud data
+- Cross-validation techniques
+- Performance metrics (precision, recall, F1-score, ROC-AUC)
+- Model comparison and selection
+
+### Real-Time Detection
+- Scoring new transactions against trained models
+- Threshold-based classification
+- Alert generation for high-risk transactions
+
+## Integration Points
+- Data pipeline for continuous fraud monitoring
+- Scoring service for real-time predictions
+- Reporting and logging mechanisms
+
+## Usage
+Refer to the lab guide for step-by-step implementation and hands-on exercises.
 @workspace how is fraud detected in this project?
 ```
 
 **`@terminal`** -- Asks Copilot about terminal/command-line operations:
 
 ```
-@terminal how do I run pytest on this project?
+To run pytest on this project:
+
+1. **Install pytest** (if not already in requirements.txt):
+```bash
+pip install pytest pytest-cov
+```
+
+2. **Run all tests**:
+```bash
+pytest
+```
+
+3. **Run tests with coverage**:
+```bash
+pytest --cov=src tests/
+```
+
+4. **Run specific test file**:
+```bash
+pytest tests/test_features.py
+```
+
+5. **Run with verbose output**:
+```bash
+pytest -v
+```
+
+The test files belong in the `tests/` directory. In Week 9, you'll create test modules like `tests/test_features.py`, `tests/test_model.py`, and `tests/test_data_loader.py` to test the corresponding source files in `src/`.
 ```
 
 ```
@@ -537,6 +619,18 @@ Two powerful context references for Copilot Chat:
 **`#file`** -- References a specific file in your chat message:
 
 ```
+## Data Loading Logic
+
+This section handles the initial data ingestion for the fraud detection pipeline. The data loading process typically includes:
+
+- **Data Source Connection**: Establishes connection to the data source (CSV file, database, or API)
+- **Data Import**: Reads raw transaction data into a pandas DataFrame
+- **Initial Inspection**: Performs basic data shape and type verification
+- **Data Validation**: Checks for missing values, duplicates, and data quality issues
+- **Feature Extraction**: Prepares raw fields for downstream processing
+- **Train/Test Split**: Divides data into training and testing sets for model evaluation
+
+The loaded data serves as input for subsequent preprocessing, feature engineering, and model training stages in the fraud detection pipeline.
 Explain the data loading logic in #file:notebooks/00_fraud_detection_pipeline.ipynb
 ```
 
