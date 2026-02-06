@@ -173,9 +173,9 @@ def hello
 
 6. **Delete the test file**: Right-click `test_copilot.py` in the Explorer and select **Delete**.
 
-- [ ] Ghost text appeared when typing `def hello`
-- [ ] Pressing Tab accepted the suggestion
-- [ ] Test file deleted
+- [y] Ghost text appeared when typing `def hello`
+- [y] Pressing Tab accepted the suggestion
+- [y] Test file deleted
 
 ---
 
@@ -307,9 +307,9 @@ def create_time_features(df: pd.DataFrame) -> pd.DataFrame:
 
 > **Teaching Point**: Notice the `applyTo` header at the top between the `---` markers. This is YAML front matter that tells Copilot "only apply these instructions when the user is editing files that match the pattern `**/features*.py`." The double asterisk `**` means "any directory depth."
 
-- [ ] `.github/instructions/` folder created
-- [ ] `features.instructions.md` file created with full content
-- [ ] File saved
+- [y] `.github/instructions/` folder created
+- [y] `features.instructions.md` file created with full content
+- [y] File saved
 
 ### Lab 4: Create `.github/instructions/model.instructions.md`
 
