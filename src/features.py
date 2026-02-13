@@ -21,14 +21,27 @@ AMOUNT_TRANSFORMATIONS = {
 def create_time_features(df: pd.DataFrame) -> pd.DataFrame:
     """Create time-based features from transaction data.
 
+    Extracts and engineers time-based features to identify patterns in
+    transaction timing, including weekend flags and night hour indicators.
+
     Args:
         df: DataFrame with 'hour' and 'day_of_week' columns.
 
     Returns:
-        DataFrame with time features added.
+        DataFrame with added time features:
+        - is_weekend: Binary flag for weekend transactions
+        - is_night: Binary flag for night hour transactions
+        - hour_sin/hour_cos: Cyclic encoding of hour
+        - day_sin/day_cos: Cyclic encoding of day of week
 
     Raises:
-        ValueError: If required columns missing.
+        ValueError: If required columns are missing.
+
+    Example:
+        >>> df = pd.DataFrame({'hour': [10, 22, 5], 'day_of_week': [2, 5, 6]})
+        >>> result = create_time_features(df)
+        >>> 'is_weekend' in result.columns
+        True
     """
     required_cols = ['hour', 'day_of_week']
     missing = set(required_cols) - set(df.columns)
@@ -57,12 +70,29 @@ def create_amount_features(
 ) -> pd.DataFrame:
     """Create amount-based features.
 
+    Engineers amount-based features including logarithmic transformations,
+    percentile rankings, and z-score normalization for fraud detection.
+
     Args:
         df: DataFrame with 'amount' column.
-        transformations: List of transformations to apply.
+        transformations: List of transformations to apply. If None, applies all
+            available transformations from AMOUNT_TRANSFORMATIONS.
 
     Returns:
-        DataFrame with amount features added.
+        DataFrame with added amount features:
+        - amount_log: Log-transformed amount
+        - amount_percentile: Percentile rank of amount
+        - amount_zscore: Z-score normalized amount
+
+    Raises:
+        ValueError: If 'amount' column is missing or unknown transformation
+            is specified.
+
+    Example:
+        >>> df = pd.DataFrame({'amount': [100, 500, 1000]})
+        >>> result = create_amount_features(df)
+        >>> 'amount_zscore' in result.columns
+        True
     """
     if 'amount' not in df.columns:
         raise ValueError("Missing required column: 'amount'")
@@ -85,13 +115,29 @@ def create_amount_features(
 
 
 def create_all_features(df: pd.DataFrame) -> pd.DataFrame:
-    """Create all features.
+    """Create all features for fraud detection.
+
+    Applies all feature engineering transformations in sequence: time-based
+    features followed by amount-based features.
 
     Args:
-        df: DataFrame with required columns.
+        df: DataFrame with required columns: 'hour', 'day_of_week', 'amount'.
 
     Returns:
-        DataFrame with all features added.
+        DataFrame with all engineered features added.
+
+    Raises:
+        ValueError: If any required columns are missing.
+
+    Example:
+        >>> df = pd.DataFrame({
+        ...     'hour': [10, 22],
+        ...     'day_of_week': [2, 5],
+        ...     'amount': [100, 500]
+        ... })
+        >>> result = create_all_features(df)
+        >>> len(result.columns) > len(df.columns)
+        True
     """
     result = df.copy()
     result = create_time_features(result)
